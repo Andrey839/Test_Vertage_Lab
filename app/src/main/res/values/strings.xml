@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Test Vertage Lab</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+</resources>

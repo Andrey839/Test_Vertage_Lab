@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="wrap_input_email_password">300dp</dimen>
+</resources>
