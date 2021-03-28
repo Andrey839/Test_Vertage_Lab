@@ -25,35 +25,42 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    private var location: LatLng = LatLng(0.0,0.0)
+    private var tittle = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        val email = Intent().getStringExtra("email") ?: ""
-        val listPlaces = Intent().getParcelableArrayListExtra<PlacesLocations>("list")
-        Log.e("tyi", "email $email list ${listPlaces?.size}")
+        val email = intent.getStringExtra("email") ?: "?"
+        val listPlaces = intent.getParcelableArrayListExtra<PlacesLocations>("list")
 
         val map = mutableMapOf<String, String>()
         val listMap = arrayListOf<MutableMap<String, String>>()
         for (i in listPlaces?.indices ?: listOf<PlacesLocations>()) {
-            mMap.addMarker(MarkerOptions().position(LatLng(listPlaces!![i as Int]!!.lat, listPlaces[i]!!.lat)).title(listPlaces[i]?.name))
+            // добавляем на карту координаты точки, название, обновляем карту
+            location = LatLng(listPlaces!![i as Int]!!.lat, listPlaces[i]!!.lat)
+            tittle = listPlaces[i]?.name.toString()
+            mapFragment.getMapAsync(this)
+            // заполняем списки местами для адаптера
             map[ID] = listPlaces[i]?.id.toString()
             listPlaces[i]?.name?.let { map.put(NAME, it) }
             listMap.add(map)
+            Log.e("tyi","li ${listMap[i].values}")
         }
         val listAttribute = arrayOf(ID, NAME)
         val listResources = intArrayOf(R.id.textId, R.id.textName)
-
+        listMap.forEach { Log.e("tyi","map ${it.values}") }
         val adapter = SimpleAdapter(this, listMap, R.layout.list_item, listAttribute, listResources)
 
         binding.textToolbar.text = email
+        // передаём адаптер
         binding.listItem.adapter = adapter
     }
 
@@ -70,7 +77,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         // Add a marker in Sydney and move the camera
-       // val sydney = LatLng(-34.0, 151.0)
-      //  mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+        // val sydney = LatLng(-34.0, 151.0)
+        //  mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+        mMap.addMarker(MarkerOptions().position(location).title(tittle))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(location))
     }
 }

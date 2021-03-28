@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.passwordView.doAfterTextChanged {
-            if (it.toString().isNotEmpty()) binding.buttonLogin.isEnabled = false
+            if (it.toString().isNotEmpty()) binding.buttonLogin.isEnabled = true
         }
     }
 

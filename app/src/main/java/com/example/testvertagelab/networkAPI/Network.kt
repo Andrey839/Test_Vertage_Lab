@@ -7,11 +7,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 
-const val basicUrl = "https://2fjd9l3x1l.api.quickmocker.com/kyiv/places"
+const val basicUrl = "https://2fjd9l3x1l.api.quickmocker.com/kyiv/"
 
 interface Places{
 
-    @GET("")
+    @GET("places/")
     suspend fun getPlaces(): JsonPlaces
 }
 
